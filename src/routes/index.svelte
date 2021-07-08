@@ -1,2 +1,28 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script context="module">
+	export const load = async ({ fetch }) => {
+		try {
+			const response = await fetch('./query/posts.json', {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					limit: 8
+				})
+			});
+			const result = await response.json();
+			return {
+				props: { data: result.data }
+			};
+		} catch (error) {
+			console.error(error);
+		}
+	};
+</script>
+
+<script>
+	export let data;
+</script>
+
+<pre>{JSON.stringify(data, null, 2)}</pre>
